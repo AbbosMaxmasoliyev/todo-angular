@@ -1,0 +1,34 @@
+.todo-container {
+    max-width: 400px;
+    margin: auto;
+    text-align: center;
+  }
+  
+  .todo-input {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .todo-list {
+    list-style: none;
+    padding: 0;
+    
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f9f9f9;
+      padding: 10px;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+  
+      .completed {
+        text-decoration: line-through;
+        color: gray;
+      }
+    }
+  }
+  

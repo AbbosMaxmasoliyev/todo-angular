@@ -1,0 +1,86 @@
+<div
+  class="todo-container flex min-h-screen justify-center items-center flex-col gap-3"
+>
+  <h2>Angular Signals Todo List</h2>
+
+  <div class="todo-input flex gap-4">
+    <input
+      #todoInput
+      type="text"
+      pInputText
+      class="w-[320px]"
+      placeholder="Yangi vazifa qo'shish"
+    />
+    <p-button
+      type="button"
+      label="Qo'shish"
+      icon="pi pi-plus"
+      (click)="addTodo(todoInput.value); todoInput.value = ''"
+    >
+    </p-button>
+  </div>
+  <div class="flex justify-between max-w-[420px] w-full">
+    <button
+      (click)="filterTodos('all')"
+      pButton
+      label="Barchasi"
+      [ngClass]="{ active: filterActive() === 'all' }"
+    >
+      <i
+        *ngIf="filterActive() === 'all'"
+        class="pi pi-check"
+        style="font-size: 1rem"
+      ></i>
+    </button>
+
+    <button
+      (click)="filterTodos(true)"
+      pButton
+      label="Bajarilganlar"
+      [ngClass]="{ active: filterActive() === true }"
+    >
+      <i
+        *ngIf="filterActive() === true"
+        class="pi pi-check"
+        style="font-size: 1rem"
+      ></i>
+    </button>
+
+    <button
+      (click)="filterTodos(false)"
+      pButton
+      label="Bajarilmaganlar"
+      [ngClass]="{ active: filterActive() === false }"
+    >
+      <i
+        *ngIf="filterActive() === false"
+        class="pi pi-check"
+        style="font-size: 1rem"
+      ></i>
+    </button>
+  </div>
+
+  <ul class="todo-list w-full md:w-[60%] flex flex-col gap-3">
+    <li
+      *ngFor="let todo of filteredTodos()"
+      class="flex flex-row gap-2 items-center"
+    >
+      <p-message
+        [severity]="todo.completed ? 'info' : 'success'"
+        ngClass="w-[90%]"
+        [class]="todo.completed ? 'line-through' : ''"
+        (click)="toggleTodo(todo.id)"
+      >
+        {{ todo.text }}
+      </p-message>
+      <p-button
+        severity="danger"
+        type="button"
+        icon="pi pi-trash"
+        class="p-button-danger p-button-text"
+        (click)="deleteTodo(todo.id)"
+      >
+      </p-button>
+    </li>
+  </ul>
+</div>
