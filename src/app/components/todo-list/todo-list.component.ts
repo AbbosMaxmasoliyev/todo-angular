@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
@@ -19,36 +19,26 @@ interface Todo {
   styleUrls: ['./todo-list.component.scss']
 })
 export class TodoListComponent {
-  // State management using Signals
-  filterActive = signal<string | boolean>("all")
-  todos = signal<Todo[]>([
-    { id: 1, text: 'Jizzax uchun loyihani tugatish', completed: false },
-    { id: 2, text: 'Consulting firmani saytini tugatish', completed: true }
-  ]);
+  todos = signal<Todo[]>([]);
+  filter = signal<'all' | boolean>('all');
 
-  // Filterlangan todo list (Signal)
-  filteredTodos = signal<Todo[]>(this.todos());
+  // Filterlangan todos ro'yxati
+  filteredTodos = computed(() => {
+    return this.filter() === 'all'
+      ? this.todos()
+      : this.todos().filter(todo => todo.completed === this.filter());
+  });
 
-  // Filtering function
-  filterTodos(filterData: string | boolean) {
-    this.filterActive.set(filterData)
-    if (typeof filterData === 'boolean') {
-      this.filteredTodos.set(this.todos().filter(todo => todo.completed === filterData));
-    } else if (filterData === 'all') {
-      this.filteredTodos.set(this.todos());
-    }
-  }
-
-  addTodo(todoText: string) {
-    console.log("Salom")
-    if (!todoText.trim()) return;
-
+  // Yangi vazifa qo'shish
+  addTodo(text: string) {
+    if (text.trim() === '') return;
     this.todos.update(todos => [
       ...todos,
-      { id: Date.now(), text: todoText, completed: false }
+      { id: Date.now(), text, completed: false }
     ]);
   }
 
+  // Vazifa holatini almashtirish
   toggleTodo(id: number) {
     this.todos.update(todos =>
       todos.map(todo =>
@@ -57,7 +47,18 @@ export class TodoListComponent {
     );
   }
 
+  // Vazifani o'chirish
   deleteTodo(id: number) {
     this.todos.update(todos => todos.filter(todo => todo.id !== id));
+  }
+
+  // Filterni o'zgartirish
+  filterTodos(type: 'all' | boolean) {
+    this.filter.set(type);
+  }
+
+  // Hozirgi filterni qaytarish
+  filterActive() {
+    return this.filter();
   }
 }

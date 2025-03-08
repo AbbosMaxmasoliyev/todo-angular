@@ -10,6 +10,7 @@
       pInputText
       class="w-[320px]"
       placeholder="Yangi vazifa qo'shish"
+      (keydown.enter)="addTodo(todoInput.value); todoInput.value = ''"
     />
     <p-button
       type="button"
@@ -19,6 +20,7 @@
     >
     </p-button>
   </div>
+
   <div class="flex justify-between max-w-[420px] w-full">
     <button
       (click)="filterTodos('all')"
@@ -67,8 +69,8 @@
     >
       <p-message
         [severity]="todo.completed ? 'info' : 'success'"
-        ngClass="w-[90%]"
-        [class]="todo.completed ? 'line-through' : ''"
+        class="w-[90%]"
+        [ngClass]="{ 'line-through': todo.completed }"
         (click)="toggleTodo(todo.id)"
       >
         {{ todo.text }}
